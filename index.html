@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motivacional do dia - Gerador de Frases</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a href="#conteudo-principal" class="link-atalho"
+      >Ir para o conteúdo principal</a
+    >
+
+    <header class="cabecalho-principal">
+      <div class="container-cabecalho">
+        <div class="marca">
+          <span class="icone-marca" aria-hidden="true"></span>
+          <h1>Motivacional do dia</h1>
+        </div>
+
+        
+        
+        <nav aria-label="Menu Principal">
+          <ul class="menu-navegacao">
+            <li><a href="#gerador">Gerador</a></li>
+            <li><a href="#sobre">Sobre</a></li>
+            <li><a href="#contato">Contato</a></li>
+            <li><a href="#radio">Rádio</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="conteudo-principal" class="container-conteudo">
+      
+      <section id="gerador" class="cartao" aria-labelledby="titulo-gerador">
+        <h2 id="titulo-gerador">Gerador de Mensagens Motivacionais</h2>
+        <p class="descricao-secao">
+          Pressione o botão abaixo para sortear e ouvir uma frase reflexiva em
+          voz alta.
+        </p>
+
+        <blockquote id="texto-frase" class="caixa-frase" aria-live="polite">
+          Clique no botão abaixo para gerar uma frase.
+        </blockquote>
+
+        <button id="btn-gerar" class="btn-destaque">Ouvir Nova Frase</button>
+      </section>
+
+      <section id="radio" class="cartao" aria-labelledby="titulo-radio">
+        <h2 id="titulo-radio">Rádio Web</h2>
+        <p class="descricao-secao">
+          Escolha a estação ou alterne entre as faixas disponíveis.
+        </p>
+
+        <div class="painel-radio" aria-live="polite">
+          <p class="label-status">Tocando agora:</p>
+          <p id="nome-estacao" class="nome-estacao">
+            Estação 1: MPB & Instrumental
+          </p>
+          <p id="nome-musica" class="nome-musica">Faixa Atual: Faixa 01</p>
+        </div>
+
+        <audio id="player-radio" preload="metadata">
+          <source
+            id="audio-source"
+            src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+            type="audio/mpeg"
+          />
+          Seu navegador não suporta o elemento de áudio.
+        </audio>
+
+        <div class="controles-radio">
+          <button id="btn-anterior" class="btn-radio">⏮ Anterior</button>
+          <button id="btn-play-pause" class="btn-radio btn-play">
+            ▶ Play / Pause
+          </button>
+          <button id="btn-proxima" class="btn-radio">⏭ Próxima</button>
+        </div>
+      </section>
+
+      <aside
+        id="sobre"
+        class="cartao cartao-lateral"
+        aria-labelledby="titulo-sobre"
+      >
+        <h2 id="titulo-sobre">Recursos de Acessibilidade</h2>
+        <p>
+          Este portal foi desenvolvido seguindo as diretrizes internacionais da
+          <strong>WCAG (AAA)</strong>:
+        </p>
+        <ul class="lista-acessibilidade">
+          <li>
+            <strong>Compatibilidade com leitor de tela:</strong> Leitura limpa
+            de todas as seções e avisos dinâmicos.
+          </li>
+          <li>
+            <strong>Alto contraste:</strong> Cores adaptadas para pessoas com
+            baixa visão ou fotofobia.
+          </li>
+          <li>
+            <strong>Navegação 100% por teclado:</strong> Todos os links e botões
+            possuem foco visível de alto brilho.
+          </li>
+        </ul>
+      </aside>
+    </main>
+
+    <footer id="contato" class="rodape-principal">
+      <div class="container-rodape">
+        <p>
+          <strong>Motivcacional do dia &copy; 2026</strong> — Desenvolvido para
+          acessibilidade total.
+        </p>
+        <p>
+          Desenvolvido com HTML5 Semântico, CSS3 Acessível e JavaScript puro.
+        </p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
