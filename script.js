@@ -1,100 +1,161 @@
-const frases = [
-  "A persistência é o caminho do êxito.",
-  "Cada pequeno passo aproxima você do seu grande objetivo.",
-  "O conhecimento é a única coisa que ninguém pode tirar de você.",
-  "Você é capaz de aprender qualquer coisa com dedicação e prática.",
-  "Aprender a programar é transformar ideias em realidade.",
-];
+// VARIÁVEIS DE ESTADO DA CALCULADORA
+let primeiroNumero = null;
+let operadorAtual = null;
+let limparNoProximoDigito = false;
 
-const elementoFrase = document.getElementById("texto-frase");
-const botaoGerar = document.getElementById("btn-gerar");
-
-function falarTexto(texto) {
-  window.speechSynthesis.cancel();
-
-  const mensagem = new SpeechSynthesisUtterance(texto);
-
-  mensagem.lang = "pt-BR";
-
-  window.speechSynthesis.speak(mensagem);
-}
-
-function sortearEGerarFrase() {
-  const indiceAleatorio = Math.floor(Math.random() * frases.length);
-  const fraseSorteada = frases[indiceAleatorio];
-
-  elementoFrase.innerText = fraseSorteada;
-
-  falarTexto(fraseSorteada);
-}
-
-botaoGerar.addEventListener("click", sortearEGerarFrase);
-
-const playlist = [
-  {
-    nome: "Estação 1: Instrumental Relaxante",
-    faixa: "Música Suave - Faixa 01",
-    url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-  },
-  {
-    nome: "Estação 2: Ritmos & Lo-Fi",
-    faixa: "Batida Tranquila - Faixa 02",
-    url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-  },
-  {
-    nome: "Estação 3: Clássicos e Piano",
-    faixa: "Melodia de Piano - Faixa 03",
-    url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-  },
-];
-
-let indiceAtual = 0;
-
-const player = document.getElementById("player-radio");
-const audioSource = document.getElementById("audio-source");
-const nomeEstacao = document.getElementById("nome-estacao");
-const nomeMusica = document.getElementById("nome-musica");
-
-const btnPlayPause = document.getElementById("btn-play-pause");
-const btnAnterior = document.getElementById("btn-anterior");
-const btnProxima = document.getElementById("btn-proxima");
-
-function carregarEstacao(posicao) {
-  const item = playlist[posicao];
-
-  player.src = item.url;
-  nomeEstacao.innerText = item.nome;
-  nomeMusica.innerText = item.faixa;
-
-  falarTexto(`Estação alterada para: ${item.nome}`);
-}
-
-function alternarPlayPause() {
-  if (player.paused) {
-    player.play();
-    btnPlayPause.innerText = "⏸ Pausar";
-    falarTexto("Rádio tocando.");
-  } else {
-    player.pause();
-    btnPlayPause.innerText = "▶ Play";
-    falarTexto("Rádio pausada.");
+// FUNÇÃO PARA SINTETIZAR VOZ (ACESSIBILIDADE PARA LEITOR DE TELA)
+function falar(texto) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const mensagem = new SpeechSynthesisUtterance(texto);
+    mensagem.lang = "pt-BR";
+    window.speechSynthesis.speak(mensagem);
   }
 }
 
-function proximaMusica() {
-  indiceAtual = (indiceAtual + 1) % playlist.length;
-  carregarEstacao(indiceAtual);
-  player.play();
-  btnPlayPause.innerText = "⏸ Pausar";
+// ETAPA 3 - ADICIONAR NÚMERO AO VISOR
+function adicionarNumero(numero) {
+  let visor = document.getElementById("visor");
+
+  // Se acabou de calcular ou escolher operador, substitui o valor
+  if (visor.value === "0" || visor.value === "Erro" || limparNoProximoDigito) {
+    visor.value = String(numero);
+    limparNoProximoDigito = false;
+  } else {
+    visor.value = visor.value + numero; // Concatena os números
+  }
+
+  falar(numero);
 }
 
-function musicaAnterior() {
-  indiceAtual = (indiceAtual - 1 + playlist.length) % playlist.length;
-  carregarEstacao(indiceAtual);
-  player.play();
-  btnPlayPause.innerText = "⏸ Pausar";
+// ADICIONAR PONTO DECIMAL
+function adicionarPonto() {
+  let visor = document.getElementById("visor");
+
+  if (limparNoProximoDigito) {
+    visor.value = "0.";
+    limparNoProximoDigito = false;
+    return;
+  }
+
+  // Validação: Impede múltiplos pontos no mesmo número
+  if (!visor.value.includes(".")) {
+    visor.value = visor.value + ".";
+    falar("ponto");
+  }
 }
 
-btnPlayPause.addEventListener("click", alternarPlayPause);
-btnProxima.addEventListener("click", proximaMusica);
-btnAnterior.addEventListener("click", musicaAnterior);
+// ETAPA 4 - REGISTRAR OPERADOR (+, -, x, ÷, %)
+function adicionarOperador(operador) {
+  let visor = document.getElementById("visor");
+  let expressao = document.getElementById("expressao");
+
+  if (visor.value === "Erro") return;
+
+  // Se já existir uma operação pendente, calcula primeiro antes de seguir
+  if (primeiroNumero !== null && operadorAtual !== null && !limparNoProximoDigito) {
+    calcular();
+  }
+
+  primeiroNumero = Number(visor.value);
+  operadorAtual = operador;
+  limparNoProximoDigito = true;
+
+  // Atualiza o visor de expressão no topo
+  expressao.innerText = `${primeiroNumero} ${operadorAtual}`;
+
+  const nomesOperadores = { '+': 'mais', '-': 'menos', 'x': 'vezes', '÷': 'dividir', '%': 'por cento de' };
+  falar(nomesOperadores[operador] || operador);
+}
+
+// ETAPA 4 - EXECUTAR CÁLCULO E VALIDAÇÕES DO BACKEND
+function calcular() {
+  let visor = document.getElementById("visor");
+  let expressao = document.getElementById("expressao");
+
+  if (primeiroNumero === null || operadorAtual === null) return;
+
+  let segundoNumero = Number(visor.value);
+  let resultado = 0;
+
+  // Atualiza a expressão no topo para mostrar o cálculo completo
+  expressao.innerText = `${primeiroNumero} ${operadorAtual} ${segundoNumero} =`;
+
+  // --- VALIDAÇÕES E REGRAS DE NEGÓCIO DO BACKEND ---
+
+  // 1. Validação de Divisão por Zero
+  if (operadorAtual === "÷" && segundoNumero === 0) {
+    visor.value = "Erro";
+    falar("Erro: Divisão por zero não é permitida");
+    resetarEstado();
+    return;
+  }
+
+  // 2. Execução da Operação Matemática
+  switch (operadorAtual) {
+    case "+":
+      resultado = primeiroNumero + segundoNumero;
+      break;
+    case "-":
+      resultado = primeiroNumero - segundoNumero;
+      break;
+    case "x":
+      resultado = primeiroNumero * segundoNumero;
+      break;
+    case "÷":
+      resultado = primeiroNumero / segundoNumero;
+      break;
+    case "%":
+      resultado = (primeiroNumero * segundoNumero) / 100;
+      break;
+  }
+
+  // 3. Validação de Limite Numérico (Overflow / Infinity)
+  if (!isFinite(resultado)) {
+    visor.value = "Erro";
+    falar("Erro: Número muito grande");
+    resetarEstado();
+    return;
+  }
+
+  // Arredonda casas decimais para evitar números como 0.30000000000000004
+  resultado = Math.round(resultado * 100000000) / 100000000;
+
+  visor.value = resultado;
+  falar(`Resultado: ${resultado}`);
+
+  resetarEstado();
+}
+
+// ETAPA 5 - LIMPAR (BOTÃO C)
+function limpar() {
+  document.getElementById("visor").value = "0";
+  document.getElementById("expressao").innerText = "";
+  resetarEstado();
+  falar("Visor limpo");
+}
+
+// DESAFIO OPCIONAL - APAGAR ÚLTIMO NÚMERO (<-)
+function apagarUltimo() {
+  let visor = document.getElementById("visor");
+
+  if (visor.value === "Erro" || limparNoProximoDigito) {
+    limpar();
+    return;
+  }
+
+  if (visor.value.length > 1) {
+    visor.value = visor.value.slice(0, -1);
+  } else {
+    visor.value = "0";
+  }
+
+  falar("Apagado");
+}
+
+// RESET AUXILIAR DAS VARIÁVEIS
+function resetarEstado() {
+  primeiroNumero = null;
+  operadorAtual = null;
+  limparNoProximoDigito = true;
+}

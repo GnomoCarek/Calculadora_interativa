@@ -1,123 +1,71 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Motivacional do dia - Gerador de Frases</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <a href="#conteudo-principal" class="link-atalho"
-      >Ir para o conteúdo principal</a
-    >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Interativa</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <h1 class="titulo" aria-label="Calculadora Interativa">Calculadora Interativa</h1>
+  
+  <!-- Contêiner Principal da Calculadora -->
+  <main class="calculadora" aria-label="Calculadora Interativa">
 
-    <header class="cabecalho-principal">
-      <div class="container-cabecalho">
-        <div class="marca">
-          <span class="icone-marca" aria-hidden="true"></span>
-          <h1>Motivacional do dia</h1>
-        </div>
-
-        
-        
-        <nav aria-label="Menu Principal">
-          <ul class="menu-navegacao">
-            <li><a href="#gerador">Gerador</a></li>
-            <li><a href="#sobre">Sobre</a></li>
-            <li><a href="#contato">Contato</a></li>
-            <li><a href="#radio">Rádio</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-
-    <main id="conteudo-principal" class="container-conteudo">
+    
+    <!-- ÁREA DO VISOR (Expressão Superior + Campo Principal) -->
+    <div class="painel-visor">
+      <!-- Exibe a expressão em andamento no topo à direita -->
+      <span id="expressao" class="visor-expressao" aria-hidden="true"></span>
       
-      <section id="gerador" class="cartao" aria-labelledby="titulo-gerador">
-        <h2 id="titulo-gerador">Gerador de Mensagens Motivacionais</h2>
-        <p class="descricao-secao">
-          Pressione o botão abaixo para sortear e ouvir uma frase reflexiva em
-          voz alta.
-        </p>
-
-        <blockquote id="texto-frase" class="caixa-frase" aria-live="polite">
-          Clique no botão abaixo para gerar uma frase.
-        </blockquote>
-
-        <button id="btn-gerar" class="btn-destaque">Ouvir Nova Frase</button>
-      </section>
-
-      <section id="radio" class="cartao" aria-labelledby="titulo-radio">
-        <h2 id="titulo-radio">Rádio Web</h2>
-        <p class="descricao-secao">
-          Escolha a estação ou alterne entre as faixas disponíveis.
-        </p>
-
-        <div class="painel-radio" aria-live="polite">
-          <p class="label-status">Tocando agora:</p>
-          <p id="nome-estacao" class="nome-estacao">
-            Estação 1: MPB & Instrumental
-          </p>
-          <p id="nome-musica" class="nome-musica">Faixa Atual: Faixa 01</p>
-        </div>
-
-        <audio id="player-radio" preload="metadata">
-          <source
-            id="audio-source"
-            src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-            type="audio/mpeg"
-          />
-          Seu navegador não suporta o elemento de áudio.
-        </audio>
-
-        <div class="controles-radio">
-          <button id="btn-anterior" class="btn-radio">⏮ Anterior</button>
-          <button id="btn-play-pause" class="btn-radio btn-play">
-            ▶ Play / Pause
-          </button>
-          <button id="btn-proxima" class="btn-radio">⏭ Próxima</button>
-        </div>
-      </section>
-
-      <aside
-        id="sobre"
-        class="cartao cartao-lateral"
-        aria-labelledby="titulo-sobre"
+      <!-- Input do visor principal pedido no projeto (Etapa 1) -->
+      <input 
+        type="text" 
+        id="visor" 
+        class="visor-input" 
+        value="0" 
+        readonly 
+        aria-live="polite" 
+        aria-label="Resultado ou número digitado"
       >
-        <h2 id="titulo-sobre">Recursos de Acessibilidade</h2>
-        <p>
-          Este portal foi desenvolvido seguindo as diretrizes internacionais da
-          <strong>WCAG (AAA)</strong>:
-        </p>
-        <ul class="lista-acessibilidade">
-          <li>
-            <strong>Compatibilidade com leitor de tela:</strong> Leitura limpa
-            de todas as seções e avisos dinâmicos.
-          </li>
-          <li>
-            <strong>Alto contraste:</strong> Cores adaptadas para pessoas com
-            baixa visão ou fotofobia.
-          </li>
-          <li>
-            <strong>Navegação 100% por teclado:</strong> Todos os links e botões
-            possuem foco visível de alto brilho.
-          </li>
-        </ul>
-      </aside>
-    </main>
+    </div>
 
-    <footer id="contato" class="rodape-principal">
-      <div class="container-rodape">
-        <p>
-          <strong>Motivcacional do dia &copy; 2026</strong> — Desenvolvido para
-          acessibilidade total.
-        </p>
-        <p>
-          Desenvolvido com HTML5 Semântico, CSS3 Acessível e JavaScript puro.
-        </p>
-      </div>
-    </footer>
+    <!-- TECLADO DE BOTÕES (4 colunas conforme layout de referência) -->
+    <div class="teclado">
+      <!-- Linha 1 -->
+      <button onclick="limpar()" class="btn btn-limpar" aria-label="Limpar tudo">C</button>
+      <button onclick="apagarUltimo()" class="btn btn-funcao" aria-label="Apagar último caractere">&lt;-</button>
+      <button onclick="adicionarOperador('%')" class="btn btn-funcao" aria-label="Porcentagem">%</button>
+      <button onclick="adicionarOperador('÷')" class="btn btn-operador" aria-label="Dividir">÷</button>
 
-    <script src="script.js"></script>
-  </body>
+      <!-- Linha 2 -->
+      <button onclick="adicionarNumero(7)" class="btn">7</button>
+      <button onclick="adicionarNumero(8)" class="btn">8</button>
+      <button onclick="adicionarNumero(9)" class="btn">9</button>
+      <button onclick="adicionarOperador('x')" class="btn btn-operador" aria-label="Multiplicar">x</button>
+
+      <!-- Linha 3 -->
+      <button onclick="adicionarNumero(4)" class="btn">4</button>
+      <button onclick="adicionarNumero(5)" class="btn">5</button>
+      <button onclick="adicionarNumero(6)" class="btn">6</button>
+      <button onclick="adicionarOperador('-')" class="btn btn-operador" aria-label="Subtrair">-</button>
+
+      <!-- Linha 4 -->
+      <button onclick="adicionarNumero(1)" class="btn">1</button>
+      <button onclick="adicionarNumero(2)" class="btn">2</button>
+      <button onclick="adicionarNumero(3)" class="btn">3</button>
+      <button onclick="adicionarOperador('+')" class="btn btn-operador" aria-label="Somar">+</button>
+
+      <!-- Linha 5 -->
+      
+      <button onclick="adicionarNumero('0')" class="btn">0</button>
+      <button onclick="adicionarPonto()" class="btn" aria-label="Ponto decimal">.</button>
+      <button onclick="calcular()" class="btn btn-igual" aria-label="Calcular resultado">=</button>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
 </html>

@@ -1,6 +1,4 @@
-/* ==========================================================================
-   1. RESET E CONFIGURAÇÕES GLOBAIS DE ACESSIBILIDADE
-   ========================================================================== */
+/* RESET E CONFIGURAÇÃO GERAL */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -8,234 +6,121 @@
 }
 
 body {
-  background-color: #121212; /* Fundo super escuro contra cansaço visual */
-  color: #ffffff; /* Texto branco puro */
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.6;
+  background-color: #0f172a;
+  font-family: Arial, sans-serif;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
-}
-
-/* LINK DE ATALHO PARA LEITOR DE TELA (Invisível até receber o foco por TAB) */
-.link-atalho {
-  position: absolute;
-  top: -100px;
-  left: 10px;
-  background: #ffd700;
-  color: #000000;
-  padding: 12px 20px;
-  font-weight: bold;
-  text-decoration: none;
-  z-index: 9999;
-  border-radius: 4px;
-}
-
-.link-atalho:focus {
-  top: 10px;
-  outline: 4px solid #ffffff;
-}
-
-/* ==========================================================================
-   2. CABEÇALHO E NAVEGAÇÃO (<header> e <nav>)
-   ========================================================================== */
-.cabecalho-principal {
-  background-color: #1e1e1e;
-  border-bottom: 4px solid #ffd700;
-  padding: 20px 0;
-}
-
-.container-cabecalho {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px;
-  display: flex;
-  justify-content: space-between;
+  flex-direction: column; /* Faz o título ficar em cima e a calculadora embaixo */
+  justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
+  padding: 20px;
+  gap: 20px; /* Cria um espaçamento agradável entre o título e a calculadora */
 }
 
-.marca {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.marca h1 {
-  font-size: 1.8rem;
+/* Estilo para o Título H1 */
+h1 {
   color: #ffffff;
+  font-size: 3rem;
+  text-align: center;
 }
 
-.menu-navegacao {
-  display: flex;
-  list-style: none;
-  gap: 20px;
-}
-
-.menu-navegacao a {
-  color: #ffd700;
-  text-decoration: underline;
-  font-size: 1.2rem;
-  font-weight: bold;
-  padding: 8px 12px;
-  border-radius: 4px;
-}
-
-.menu-navegacao a:hover {
-  background-color: #ffd700;
-  color: #000000;
-}
-
-/* ==========================================================================
-   3. ESTRUTURA PRINCIPAL (<main> e <section>)
-   ========================================================================== */
-.container-conteudo {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 0 20px;
+/* ESTRUTURA DO CORPO DA CALCULADORA */
+.calculadora {
+  background-color: #ffffff;
+  border: 3px solid #334155;
+  border-radius: 8px;
+  padding: 16px;
   width: 100%;
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 32px;
-  flex: 1;
+  max-width: 340px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
-/* Layout responsivo para telas menores */
-@media (max-width: 768px) {
-  .container-conteudo {
-    grid-template-columns: 1fr;
-  }
-}
-
-.cartao {
-  background-color: #1e1e1e;
-  border: 3px solid #ffffff;
-  border-radius: 3px;
-  padding: 32px 24px;
-}
-
-h2 {
-  font-size: 1.6rem;
-  margin-bottom: 16px;
-  color: #ffffff;
-  border-bottom: 2px solid #333333;
-  padding-bottom: 8px;
-}
-
-.descricao-secao {
-  font-size: 1.1rem;
-  margin-bottom: 24px;
-  color: #d0d0d0;
-}
-
-.caixa-frase {
-  background-color: #2a2a2a;
-  border-left: 8px solid #ffd700;
-  padding: 24px;
+/* ÁREA DO VISOR */
+.painel-visor {
+  background-color: #0d131a;
+  border: 2px solid #1e293b;
   border-radius: 6px;
-  font-size: 1.4rem;
-  font-weight: 500;
-  line-height: 1.5;
-  color: #ffffff;
-  margin-bottom: 28px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  text-align: right;
+  min-height: 85px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.visor-expressao {
+  color: #94a3b8;
+  font-size: 1rem;
+  font-weight: bold;
+  min-height: 1.2rem;
   word-wrap: break-word;
 }
 
-/* ==========================================================================
-   4. BOTÕES E FOCO VISÍVEL DE ALTO CONTRASTE
-   ========================================================================== */
-.btn-destaque {
-  background-color: #ffd700;
-  color: #000000;
-  font-size: 1.25rem;
-  font-weight: bold;
-  padding: 18px 32px;
+.visor-input {
+  background: transparent;
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  width: 100%;
-  transition: background-color 0.2s ease;
-}
-
-.btn-destaque:hover {
-  background-color: #ffea00;
-}
-
-/* INDICADOR DE FOCO ULTRA-VISÍVEL PARA NAVEGAÇÃO POR TECLADO (TAB) */
-a:focus,
-button:focus {
-  outline: 4px solid #ffffff !important;
-  outline-offset: 4px !important;
-  box-shadow: 0 0 0 8px #00e5ff !important; /* Anel externo azul ciano vibrante */
-}
-
-/* ==========================================================================
-   5. BARRA LATERAL E RODAPÉ (<aside> e <footer>)
-   ========================================================================== */
-.cartao-lateral {
-  background-color: #181818;
-}
-
-.lista-acessibilidade {
-  margin-top: 16px;
-  padding-left: 20px;
-}
-
-.lista-acessibilidade li {
-  margin-bottom: 12px;
-  font-size: 1.05rem;
-}
-
-.rodape-principal {
-  background-color: #1e1e1e;
-  border-top: 4px solid #ffd700;
-  padding: 24px 0;
-  margin-top: 40px;
-  text-align: center;
-  color: #cccccc;
-}
-
-.container-rodape p {
-  margin-bottom: 6px;
-}
-
-.painel-radio {
-  background-color: #2a2a2a;
-  border-left: 6px solid #00e5ff; /* Destaque azul ciano */
-  padding: 16px;
-  border-radius: 6px;
-  margin-bottom: 20px;
-}
-
-.nome-estacao {
-  font-size: 1.3rem;
+  color: #ffffff;
+  font-size: 2.2rem;
   font-weight: bold;
-  color: #ffd700; /* Amarelo alto contraste */
+  text-align: right;
+  width: 100%;
+  outline: none;
 }
 
-.nome-musica {
-  font-size: 1.1rem;
+/* TECLADO E GRADE DE BOTÕES (GRID DE 4 COLUNAS) */
+.teclado {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+/* ESTILO BASE DOS BOTÕES */
+.btn {
+  background-color: #24303e; /* Cor escura padrão dos números */
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 16px 0;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: filter 0.1s ease;
+}
+
+.btn:hover {
+  filter: brightness(1.2);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* CORES ESPECÍFICAS DA IMAGEM DE REFERÊNCIA */
+.btn-limpar {
+  background-color: #e55353; /* Vermelho/Coral para o 'C' */
   color: #ffffff;
 }
 
-.controles-radio {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
+.btn-funcao {
+  background-color: #24303e;
+  color: #ffffff;
 }
 
-.btn-radio {
-  background-color: #ffd700;
-  color: #000000;
-  font-size: 1.1rem;
-  font-weight: bold;
-  padding: 16px 8px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+.btn-operador {
+  background-color: #f59e0b; /* Laranja para as 4 operações (+, -, x, ÷) */
+  color: #ffffff;
 }
 
-.btn-radio:hover {
-  background-color: #ffea00;
+.btn-igual {
+  grid-column: span 2;
+  background-color: #2563eb; /* Azul brilhante para o '=' */
+  color: #ffffff;
+}
+
+/* ACESSIBILIDADE: FOCO VISÍVEL DE ALTO CONTRASTE (NAVEGAÇÃO POR TECLADO) */
+.btn:focus {
+  outline: 3px solid #000000 !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px #bbbe02;
 }
